@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Previsão do Tempo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .weather-info {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consulta de Previsão do Tempo</h1>
+    <input type="text" id="city" placeholder="Digite o nome da cidade">
+    <button onclick="fetchWeather()">Consultar</button>
+
+    <div class="weather-info" id="weather-info"></div>
+
+    <script>
+        async function fetchWeather() {
+            const city = document.getElementById('city').value;
+            if (!city) {
+                alert('Por favor, insira o nome da cidade!');
+                return;
+            }
+            const response = await fetch(`/weather?city=${city}`);
+            const data = await response.json();
+
+            const weatherInfoDiv = document.getElementById('weather-info');
+            weatherInfoDiv.innerHTML = '';
+
+            if (data.error) {
+                weatherInfoDiv.innerHTML = `<p>${data.error}</p>`;
+            } else {
+                weatherInfoDiv.innerHTML = `
+                    <h2>Previsão para ${data.cidade}</h2>
+                    <p>Temperatura: ${data.temperatura}°C</p>
+                    <p>Descrição: ${data.descricao}</p>
+                    <p>Umidade: ${data.umidade}%</p>
+                    <p>Velocidade do Vento: ${data.vento} m/s</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
